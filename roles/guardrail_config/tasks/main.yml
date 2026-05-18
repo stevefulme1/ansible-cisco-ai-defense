@@ -1,0 +1,9 @@
+---
+- name: Validate required parameters
+  ansible.builtin.assert:
+    that: guardrail_config_guardrail_type is defined
+    quiet: true
+
+- name: Execute guardrail_config
+  ansible.builtin.debug:
+    msg: "Configure guardrails for Cisco AI Defense"

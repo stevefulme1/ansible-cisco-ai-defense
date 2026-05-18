@@ -1,0 +1,9 @@
+---
+- name: Validate required parameters
+  ansible.builtin.assert:
+    that: ai_defense_deploy_api_key is defined
+    quiet: true
+
+- name: Execute ai_defense_deploy
+  ansible.builtin.debug:
+    msg: "Deploy Cisco AI Defense agents and policies"
