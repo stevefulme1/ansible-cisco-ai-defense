@@ -1,0 +1,20 @@
+---
+# Internal variables - do not override
+ai_defense_redteam_api_headers:
+  Content-Type: "application/json"
+  Authorization: "Bearer {{ ai_defense_redteam_api_key }}"
+
+ai_defense_redteam_valid_categories:
+  - prompt_injection
+  - jailbreak
+  - pii_leakage
+  - hallucination
+  - toxicity
+  - bias
+  - data_exfiltration
+  - instruction_hierarchy
+
+ai_defense_redteam_valid_report_formats:
+  - json
+  - html
+  - csv

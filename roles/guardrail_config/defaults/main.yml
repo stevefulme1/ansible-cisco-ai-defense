@@ -1,4 +1,57 @@
 ---
-guardrail_config_guardrail_type: ""
-guardrail_config_rules: ""
-guardrail_config_state: ""
+# Cisco AI Defense API connection
+guardrail_config_api_url: "https://aidefense.cisco.com/api/v1"
+guardrail_config_api_key: ""
+guardrail_config_verify_ssl: true
+guardrail_config_api_timeout: 30
+
+# Organization
+guardrail_config_organization_id: ""
+
+# Guardrail policies (list of policy definitions)
+guardrail_config_policies: []
+#   - name: "default-input-guardrail"
+#     type: input
+#     enabled: true
+#     actions:
+#       - block
+#       - log
+
+# PII detection rules
+guardrail_config_pii_detection_enabled: true
+guardrail_config_pii_entity_types:
+  - email
+  - phone_number
+  - credit_card
+  - ssn
+  - ip_address
+guardrail_config_pii_action: redact
+
+# Topic boundary configuration
+guardrail_config_topic_boundaries_enabled: true
+guardrail_config_allowed_topics: []
+guardrail_config_blocked_topics: []
+
+# Content filter settings
+guardrail_config_content_filters_enabled: true
+guardrail_config_content_filter_categories:
+  - name: hate_speech
+    enabled: true
+    threshold: medium
+  - name: violence
+    enabled: true
+    threshold: medium
+  - name: sexual_content
+    enabled: true
+    threshold: high
+  - name: self_harm
+    enabled: true
+    threshold: low
+
+# Rate limiting
+guardrail_config_rate_limiting_enabled: true
+guardrail_config_rate_limit_requests_per_minute: 60
+guardrail_config_rate_limit_tokens_per_minute: 100000
+
+# State management
+guardrail_config_state: present

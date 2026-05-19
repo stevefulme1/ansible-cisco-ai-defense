@@ -4,7 +4,6 @@ skip_list:
   - yaml[line-length]
   - yaml[truthy]
   - args[module]
-  - galaxy[no-changelog]
 
 exclude_paths:
   - tests/integration/

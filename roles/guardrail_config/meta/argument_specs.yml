@@ -1,0 +1,94 @@
+---
+argument_specs:
+  main:
+    short_description: Configure guardrails for Cisco AI Defense
+    description:
+      - Applies guardrail policies, configures PII detection rules,
+        sets up topic boundaries, configures content filters,
+        and applies rate limiting policies.
+    options:
+      guardrail_config_api_url:
+        description: Base URL for the Cisco AI Defense API.
+        type: str
+        default: "https://aidefense.cisco.com/api/v1"
+      guardrail_config_api_key:
+        description: API key for authenticating with Cisco AI Defense.
+        type: str
+        required: true
+        no_log: true
+      guardrail_config_verify_ssl:
+        description: Whether to verify SSL certificates for API calls.
+        type: bool
+        default: true
+      guardrail_config_organization_id:
+        description: Cisco AI Defense organization identifier.
+        type: str
+        required: true
+      guardrail_config_policies:
+        description: List of guardrail policy definitions to apply.
+        type: list
+        elements: dict
+        default: []
+      guardrail_config_pii_detection_enabled:
+        description: Enable PII detection in guardrails.
+        type: bool
+        default: true
+      guardrail_config_pii_entity_types:
+        description: PII entity types to detect.
+        type: list
+        elements: str
+        default:
+          - email
+          - phone_number
+          - credit_card
+          - ssn
+          - ip_address
+      guardrail_config_pii_action:
+        description: Action to take when PII is detected.
+        type: str
+        default: redact
+        choices:
+          - redact
+          - block
+          - log
+      guardrail_config_topic_boundaries_enabled:
+        description: Enable topic boundary enforcement.
+        type: bool
+        default: true
+      guardrail_config_allowed_topics:
+        description: List of allowed conversation topics.
+        type: list
+        elements: str
+        default: []
+      guardrail_config_blocked_topics:
+        description: List of blocked conversation topics.
+        type: list
+        elements: str
+        default: []
+      guardrail_config_content_filters_enabled:
+        description: Enable content category filters.
+        type: bool
+        default: true
+      guardrail_config_content_filter_categories:
+        description: Content filter category definitions with thresholds.
+        type: list
+        elements: dict
+      guardrail_config_rate_limiting_enabled:
+        description: Enable rate limiting.
+        type: bool
+        default: true
+      guardrail_config_rate_limit_requests_per_minute:
+        description: Maximum API requests per minute.
+        type: int
+        default: 60
+      guardrail_config_rate_limit_tokens_per_minute:
+        description: Maximum tokens per minute.
+        type: int
+        default: 100000
+      guardrail_config_state:
+        description: Desired state of the guardrail configuration.
+        type: str
+        default: present
+        choices:
+          - present
+          - absent

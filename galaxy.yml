@@ -1,23 +1,27 @@
 ---
 namespace: stevefulme1
 name: cisco_ai_defense
-version: 1.0.1
+version: 2.0.0
 readme: README.md
 authors:
   - Steve Fulmer <sfulmer@redhat.com>
 description: >-
   Ansible Collection for Cisco AI Defense platform.
-  Provides modules for managing policies, guardrails, threat detection,
-  model scanning, API protection, compliance reports, audit logs,
-  and threat feeds via the Cisco AI Defense REST API.
+  Provides 35 modules, 6 roles, filter/lookup plugins, and EDA plugins
+  for managing policies, guardrails, threat detection, model scanning,
+  API protection, compliance reports, supply chain risk, PII detection,
+  and red-team validation via the Cisco AI Defense REST API.
 license:
   - GPL-3.0-or-later
 tags:
-  - cisco
-  - ai
   - security
+  - ai
+  - cisco
   - defense
+  - guardrail
   - compliance
+  - ml
+  - llm
 dependencies: {}
 repository: https://github.com/stevefulme1/ansible-cisco-ai-defense
 documentation: https://github.com/stevefulme1/ansible-cisco-ai-defense/blob/main/README.md
@@ -26,4 +30,9 @@ issues: https://github.com/stevefulme1/ansible-cisco-ai-defense/issues
 build_ignore:
   - .git
   - .github
-  - tests/output
+  - tests
+  - .yamllint
+  - .ansible-lint
+  - .pre-commit-config.yaml
+  - .DS_Store
+  - __pycache__

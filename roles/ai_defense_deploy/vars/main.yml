@@ -1,0 +1,16 @@
+---
+# Internal variables - do not override
+ai_defense_deploy_api_headers:
+  Content-Type: "application/json"
+  Authorization: "Bearer {{ ai_defense_deploy_api_key }}"
+
+ai_defense_deploy_valid_log_levels:
+  - debug
+  - info
+  - warning
+  - error
+
+ai_defense_deploy_health_endpoint: "{{ ai_defense_deploy_api_url }}/health"
+ai_defense_deploy_org_endpoint: "{{ ai_defense_deploy_api_url }}/organizations"
+ai_defense_deploy_webhook_endpoint: "{{ ai_defense_deploy_api_url }}/webhooks"
+ai_defense_deploy_credentials_endpoint: "{{ ai_defense_deploy_api_url }}/credentials"

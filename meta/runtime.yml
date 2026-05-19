@@ -1,2 +1,40 @@
 ---
-requires_ansible: '>=2.16.0'
+requires_ansible: ">=2.16.0"
+
+action_groups:
+  cisco_ai_defense:
+    - policy
+    - policy_info
+    - policy_assignment
+    - policy_export
+    - policy_import
+    - guardrail
+    - guardrail_info
+    - guardrail_rule
+    - threat_detection
+    - threat_detection_info
+    - threat_feed
+    - model_scan
+    - model_scan_info
+    - model_provenance
+    - container_scan
+    - api_protection
+    - api_protection_info
+    - rate_limit
+    - compliance_report
+    - compliance_report_info
+    - supply_chain_report
+    - supply_chain_report_info
+    - audit_log_info
+    - metrics_info
+    - discovery
+    - inventory_info
+    - shadow_ai
+    - validation_run
+    - validation_config
+    - validation_schedule
+    - validation_categories_info
+    - validation_report_info
+    - pii_policy
+    - topic_policy
+    - splunk_integration

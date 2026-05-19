@@ -1,8 +1,21 @@
 ---
 galaxy_info:
   author: Steve Fulmer
-  description: "Configure guardrails for Cisco AI Defense"
-  license: Apache-2.0
+  description: Configure guardrails for Cisco AI Defense
+  license: GPL-3.0-or-later
   min_ansible_version: '2.16'
-  galaxy_tags: [cisco]
+  platforms:
+    - name: EL
+      versions:
+        - '8'
+        - '9'
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+  galaxy_tags:
+    - cisco
+    - ai
+    - security
+    - guardrail
 dependencies: []

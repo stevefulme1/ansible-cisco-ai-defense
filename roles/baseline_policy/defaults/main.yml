@@ -1,0 +1,25 @@
+---
+# Cisco AI Defense API connection
+ai_defense_baseline_api_url: "https://aidefense.cisco.com/api/v1"
+ai_defense_baseline_api_key: ""
+ai_defense_baseline_verify_ssl: true
+ai_defense_baseline_api_timeout: 30
+
+# Organization
+ai_defense_baseline_organization_id: ""
+
+# Baseline preset selection
+ai_defense_baseline_preset: "chatbot"
+# Choices: chatbot, code_generation, document_analysis, customer_service
+
+# Standard safety controls
+ai_defense_baseline_pii_detection: true
+ai_defense_baseline_prompt_injection_defense: true
+ai_defense_baseline_rate_limiting: true
+
+# Default rate limits (per preset overrides may apply)
+ai_defense_baseline_rate_limit_rpm: 60
+ai_defense_baseline_rate_limit_tpm: 100000
+
+# State management
+ai_defense_baseline_state: present

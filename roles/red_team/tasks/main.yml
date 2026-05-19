@@ -1,0 +1,113 @@
+---
+- name: Validate required parameters
+  ansible.builtin.assert:
+    that:
+      - ai_defense_redteam_api_key | length > 0
+      - ai_defense_redteam_organization_id | length > 0
+      - ai_defense_redteam_model_endpoint | length > 0
+      - ai_defense_redteam_pass_threshold >= 0.0
+      - ai_defense_redteam_pass_threshold <= 1.0
+      - ai_defense_redteam_report_format in ai_defense_redteam_valid_report_formats
+    fail_msg: >-
+      Missing required parameters. Ensure ai_defense_redteam_api_key,
+      ai_defense_redteam_organization_id, and ai_defense_redteam_model_endpoint
+      are defined. Pass threshold must be between 0.0 and 1.0.
+    quiet: true
+
+- name: Validate requested categories
+  ansible.builtin.assert:
+    that:
+      - item in ai_defense_redteam_valid_categories
+    fail_msg: "Invalid category '{{ item }}'. Valid: {{ ai_defense_redteam_valid_categories | join(', ') }}"
+    quiet: true
+  loop: "{{ ai_defense_redteam_categories }}"
+
+- name: Configure red team validation
+  ansible.builtin.uri:
+    url: "{{ ai_defense_redteam_api_url }}/organizations/{{ ai_defense_redteam_organization_id }}/redteam/configure"
+    method: POST
+    headers: "{{ ai_defense_redteam_api_headers }}"
+    body_format: json
+    body:
+      model_endpoint: "{{ ai_defense_redteam_model_endpoint }}"
+      categories: "{{ ai_defense_redteam_categories }}"
+      report_format: "{{ ai_defense_redteam_report_format }}"
+    validate_certs: "{{ ai_defense_redteam_verify_ssl }}"
+    timeout: "{{ ai_defense_redteam_api_timeout }}"
+    status_code: [200, 201]
+  register: ai_defense_redteam_config_result
+  when: not ansible_check_mode
+
+- name: Configure red team validation (check mode)
+  ansible.builtin.debug:
+    msg: >-
+      Would configure red team validation for {{ ai_defense_redteam_model_endpoint }}
+      with categories: {{ ai_defense_redteam_categories | join(', ') }}
+  when: ansible_check_mode
+
+- name: Execute red team validation run
+  ansible.builtin.uri:
+    url: "{{ ai_defense_redteam_api_url }}/organizations/{{ ai_defense_redteam_organization_id }}/redteam/execute"
+    method: POST
+    headers: "{{ ai_defense_redteam_api_headers }}"
+    body_format: json
+    body:
+      configuration_id: "{{ ai_defense_redteam_config_result.json.configuration_id }}"
+    validate_certs: "{{ ai_defense_redteam_verify_ssl }}"
+    timeout: "{{ ai_defense_redteam_api_timeout }}"
+    status_code: [200, 202]
+  register: ai_defense_redteam_run_result
+  when: not ansible_check_mode
+
+- name: Execute red team validation run (check mode)
+  ansible.builtin.debug:
+    msg: "Would execute red team validation run"
+  when: ansible_check_mode
+
+- name: Wait for validation run to complete
+  ansible.builtin.uri:
+    url: >-
+
+    method: GET
+    headers: "{{ ai_defense_redteam_api_headers }}"
+    validate_certs: "{{ ai_defense_redteam_verify_ssl }}"
+    timeout: "{{ ai_defense_redteam_api_timeout }}"
+    status_code: [200]
+  register: ai_defense_redteam_status
+  until: ai_defense_redteam_status.json.status in ['completed', 'failed']
+  retries: "{{ (ai_defense_redteam_poll_timeout / ai_defense_redteam_poll_interval) | int }}"
+  delay: "{{ ai_defense_redteam_poll_interval }}"
+  when: not ansible_check_mode
+
+- name: Retrieve validation report
+  ansible.builtin.uri:
+    url: >-
+
+    method: GET
+    headers: "{{ ai_defense_redteam_api_headers }}"
+    validate_certs: "{{ ai_defense_redteam_verify_ssl }}"
+    timeout: "{{ ai_defense_redteam_api_timeout }}"
+    status_code: [200]
+  register: ai_defense_redteam_report
+  when: not ansible_check_mode
+
+- name: Display validation results summary
+  ansible.builtin.debug:
+    msg: >-
+      Red team validation score: {{ ai_defense_redteam_report.json.overall_score | default('N/A') }}
+      (threshold: {{ ai_defense_redteam_pass_threshold }})
+  when: not ansible_check_mode
+
+- name: Evaluate results against pass threshold
+  ansible.builtin.assert:
+    that:
+      - (ai_defense_redteam_report.json.overall_score | float) >= (ai_defense_redteam_pass_threshold | float)
+    fail_msg: >-
+      Red team validation FAILED. Score {{ ai_defense_redteam_report.json.overall_score }}
+      is below threshold {{ ai_defense_redteam_pass_threshold }}.
+    success_msg: >-
+      Red team validation PASSED. Score {{ ai_defense_redteam_report.json.overall_score }}
+      meets threshold {{ ai_defense_redteam_pass_threshold }}.
+  when:
+    - not ansible_check_mode
+    - ai_defense_redteam_fail_on_threshold

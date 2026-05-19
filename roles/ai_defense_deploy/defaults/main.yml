@@ -1,4 +1,26 @@
 ---
+# Cisco AI Defense API connection
+ai_defense_deploy_api_url: "https://aidefense.cisco.com/api/v1"
 ai_defense_deploy_api_key: ""
+ai_defense_deploy_verify_ssl: true
+
+# Organization configuration
 ai_defense_deploy_organization_id: ""
-ai_defense_deploy_state: ""
+ai_defense_deploy_organization_name: ""
+
+# Webhook configuration
+ai_defense_deploy_webhook_url: ""
+ai_defense_deploy_webhook_secret: ""
+ai_defense_deploy_webhook_events:
+  - threat_detected
+  - policy_violation
+  - compliance_alert
+
+# Operational settings
+ai_defense_deploy_log_level: "info"
+ai_defense_deploy_state: "present"
+
+# Timeouts (seconds)
+ai_defense_deploy_api_timeout: 30
+ai_defense_deploy_health_check_retries: 5
+ai_defense_deploy_health_check_delay: 10

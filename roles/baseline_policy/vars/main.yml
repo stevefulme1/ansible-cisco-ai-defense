@@ -1,0 +1,77 @@
+---
+# Internal variables - do not override
+ai_defense_baseline_api_headers:
+  Content-Type: "application/json"
+  Authorization: "Bearer {{ ai_defense_baseline_api_key }}"
+
+ai_defense_baseline_valid_presets:
+  - chatbot
+  - code_generation
+  - document_analysis
+  - customer_service
+
+# Preset-specific policy configurations
+ai_defense_baseline_preset_configs:
+  chatbot:
+    content_filters:
+      - name: hate_speech
+        threshold: medium
+      - name: violence
+        threshold: medium
+      - name: sexual_content
+        threshold: high
+      - name: self_harm
+        threshold: low
+    pii_entity_types:
+      - email
+      - phone_number
+      - credit_card
+      - ssn
+    topic_restrictions: true
+    max_output_tokens: 4096
+  code_generation:
+    content_filters:
+      - name: hate_speech
+        threshold: high
+      - name: malicious_code
+        threshold: low
+      - name: secret_leakage
+        threshold: low
+    pii_entity_types:
+      - api_key
+      - password
+      - private_key
+      - connection_string
+    topic_restrictions: false
+    max_output_tokens: 8192
+  document_analysis:
+    content_filters:
+      - name: hate_speech
+        threshold: medium
+      - name: misinformation
+        threshold: medium
+    pii_entity_types:
+      - email
+      - phone_number
+      - credit_card
+      - ssn
+      - address
+      - date_of_birth
+    topic_restrictions: false
+    max_output_tokens: 16384
+  customer_service:
+    content_filters:
+      - name: hate_speech
+        threshold: low
+      - name: violence
+        threshold: medium
+      - name: profanity
+        threshold: medium
+    pii_entity_types:
+      - email
+      - phone_number
+      - credit_card
+      - ssn
+      - account_number
+    topic_restrictions: true
+    max_output_tokens: 2048

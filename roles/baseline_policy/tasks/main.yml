@@ -1,0 +1,125 @@
+---
+- name: Validate required parameters
+  ansible.builtin.assert:
+    that:
+      - ai_defense_baseline_api_key | length > 0
+      - ai_defense_baseline_organization_id | length > 0
+      - ai_defense_baseline_preset in ai_defense_baseline_valid_presets
+    fail_msg: >-
+      Missing required parameters or invalid preset.
+      Valid presets: {{ ai_defense_baseline_valid_presets | join(', ') }}
+    quiet: true
+
+- name: Set preset configuration
+  ansible.builtin.set_fact:
+    ai_defense_baseline_active_config: >-
+      {{ ai_defense_baseline_preset_configs[ai_defense_baseline_preset] }}
+
+- name: Display baseline policy being applied
+  ansible.builtin.debug:
+    msg: "Applying '{{ ai_defense_baseline_preset }}' baseline policy preset"
+
+- name: Apply preset-specific guardrail policies
+  ansible.builtin.uri:
+    url: "{{ ai_defense_baseline_api_url }}/organizations/{{ ai_defense_baseline_organization_id }}/policies/baseline"
+    method: PUT
+    headers: "{{ ai_defense_baseline_api_headers }}"
+    body_format: json
+    body:
+      preset: "{{ ai_defense_baseline_preset }}"
+      content_filters: "{{ ai_defense_baseline_active_config.content_filters }}"
+      topic_restrictions: "{{ ai_defense_baseline_active_config.topic_restrictions }}"
+      max_output_tokens: "{{ ai_defense_baseline_active_config.max_output_tokens }}"
+      state: "{{ ai_defense_baseline_state }}"
+    validate_certs: "{{ ai_defense_baseline_verify_ssl }}"
+    timeout: "{{ ai_defense_baseline_api_timeout }}"
+    status_code: [200, 201]
+  when: not ansible_check_mode
+
+- name: Apply preset-specific guardrail policies (check mode)
+  ansible.builtin.debug:
+    msg: "Would apply '{{ ai_defense_baseline_preset }}' preset policies"
+  when: ansible_check_mode
+
+- name: Configure standard PII detection rules
+  ansible.builtin.uri:
+    url: "{{ ai_defense_baseline_api_url }}/organizations/{{ ai_defense_baseline_organization_id }}/guardrails/pii"
+    method: PUT
+    headers: "{{ ai_defense_baseline_api_headers }}"
+    body_format: json
+    body:
+      enabled: "{{ ai_defense_baseline_pii_detection }}"
+      entity_types: "{{ ai_defense_baseline_active_config.pii_entity_types }}"
+      action: redact
+    validate_certs: "{{ ai_defense_baseline_verify_ssl }}"
+    timeout: "{{ ai_defense_baseline_api_timeout }}"
+    status_code: [200, 201]
+  when:
+    - not ansible_check_mode
+    - ai_defense_baseline_pii_detection
+
+- name: Configure standard PII detection rules (check mode)
+  ansible.builtin.debug:
+    msg: >-
+      Would configure PII detection for entity types:
+      {{ ai_defense_baseline_active_config.pii_entity_types | join(', ') }}
+  when:
+    - ansible_check_mode
+    - ai_defense_baseline_pii_detection
+
+- name: Configure prompt injection defense
+  ansible.builtin.uri:
+    url: "{{ ai_defense_baseline_api_url }}/organizations/{{ ai_defense_baseline_organization_id }}/guardrails/prompt-injection"
+    method: PUT
+    headers: "{{ ai_defense_baseline_api_headers }}"
+    body_format: json
+    body:
+      enabled: "{{ ai_defense_baseline_prompt_injection_defense }}"
+      mode: active
+      action: block
+    validate_certs: "{{ ai_defense_baseline_verify_ssl }}"
+    timeout: "{{ ai_defense_baseline_api_timeout }}"
+    status_code: [200, 201]
+  when:
+    - not ansible_check_mode
+    - ai_defense_baseline_prompt_injection_defense
+
+- name: Configure prompt injection defense (check mode)
+  ansible.builtin.debug:
+    msg: "Would enable prompt injection defense in active/block mode"
+  when:
+    - ansible_check_mode
+    - ai_defense_baseline_prompt_injection_defense
+
+- name: Set default rate limits
+  ansible.builtin.uri:
+    url: "{{ ai_defense_baseline_api_url }}/organizations/{{ ai_defense_baseline_organization_id }}/guardrails/rate-limits"
+    method: PUT
+    headers: "{{ ai_defense_baseline_api_headers }}"
+    body_format: json
+    body:
+      enabled: "{{ ai_defense_baseline_rate_limiting }}"
+      requests_per_minute: "{{ ai_defense_baseline_rate_limit_rpm }}"
+      tokens_per_minute: "{{ ai_defense_baseline_rate_limit_tpm }}"
+    validate_certs: "{{ ai_defense_baseline_verify_ssl }}"
+    timeout: "{{ ai_defense_baseline_api_timeout }}"
+    status_code: [200, 201]
+  when:
+    - not ansible_check_mode
+    - ai_defense_baseline_rate_limiting
+
+- name: Set default rate limits (check mode)
+  ansible.builtin.debug:
+    msg: >-
+      Would set rate limits: {{ ai_defense_baseline_rate_limit_rpm }} req/min,
+      {{ ai_defense_baseline_rate_limit_tpm }} tokens/min
+  when:
+    - ansible_check_mode
+    - ai_defense_baseline_rate_limiting
+
+- name: Report baseline policy status
+  ansible.builtin.debug:
+    msg: >-
+      Baseline policy '{{ ai_defense_baseline_preset }}'
+      {{ 'applied' if not ansible_check_mode else 'validated (check mode)' }}
+      for organization {{ ai_defense_baseline_organization_id }}.

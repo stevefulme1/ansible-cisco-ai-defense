@@ -1,16 +1,41 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.tox/
+.nox/
+.pytest_cache/
+.venv/
+venv/
+
+# Ansible
+*.retry
+tests/output/
+collections/
+
+# Build artifacts
 *.tar.gz
 
-# Security and editor artifacts
+# Secrets and credentials
 .env
 .env.*
 *.pem
 *.key
 *.crt
+*.p12
 vault_pass*
+*vault*.yml
 credentials*
-*.retry
+
+# IDE
 .vscode/
 .idea/
+
+# OS
 .DS_Store
+
+# Logs
 *.log
-.venv/
