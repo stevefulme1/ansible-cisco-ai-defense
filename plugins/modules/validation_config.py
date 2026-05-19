@@ -134,7 +134,7 @@ def main():
     module_args = dict(
         name=dict(type="str", required=True),
         categories=dict(type="list", elements="str", required=True),
-        pass_threshold=dict(type="float", default=0.8),
+        pass_threshold=dict(type="float", default=0.8, no_log=False),
         report_format=dict(
             type="str",
             choices=["json", "html", "pdf"],

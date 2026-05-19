@@ -36,7 +36,6 @@ options:
     description: API key for authenticating with Cisco AI Defense.
     type: str
     required: true
-    no_log: true
     env:
       - name: AI_DEFENSE_API_KEY
     ini:
