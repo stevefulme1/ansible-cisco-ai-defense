@@ -113,7 +113,6 @@ file_path:
 """
 
 import json
-import os
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.stevefulme1.cisco_ai_defense.plugins.module_utils.ai_defense import (
