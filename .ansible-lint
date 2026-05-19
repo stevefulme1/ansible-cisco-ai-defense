@@ -4,8 +4,6 @@ skip_list:
   - yaml[line-length]
   - yaml[truthy]
   - args[module]
-  - sanity[cannot-ignore]
-  - sanity[bad-ignore]
 
 exclude_paths:
   - tests/integration/
