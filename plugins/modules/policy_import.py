@@ -66,7 +66,6 @@ options:
             - The API key for authentication.
         type: str
         required: true
-        no_log: true
     validate_certs:
         description:
             - Whether to validate SSL certificates.
@@ -156,7 +155,7 @@ def load_source(module):
         return source
 
     # Otherwise treat it as a file path
-    source_path = os.path.expanduser(str(source))
+    source_path = str(source)
     if not os.path.isfile(source_path):
         module.fail_json(msg=f"Source file not found: {source_path}")
 

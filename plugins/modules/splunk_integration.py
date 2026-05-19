@@ -37,7 +37,6 @@ options:
             - The Splunk HEC authentication token.
         type: str
         required: true
-        no_log: true
     event_types:
         description:
             - List of event categories to forward to Splunk.
@@ -87,7 +86,6 @@ options:
             - The API key for authentication.
         type: str
         required: true
-        no_log: true
     validate_certs:
         description:
             - Whether to validate SSL certificates.

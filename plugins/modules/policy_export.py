@@ -55,7 +55,6 @@ options:
             - The API key for authentication.
         type: str
         required: true
-        no_log: true
     validate_certs:
         description:
             - Whether to validate SSL certificates.
@@ -153,7 +152,7 @@ def main():
 
     dest = module.params.get("dest")
     if dest:
-        dest = os.path.expanduser(dest)
+        # type=path handles expansion automatically
         try:
             with open(dest, "w", encoding="utf-8") as fh:
                 if module.params["export_format"] == "json":
