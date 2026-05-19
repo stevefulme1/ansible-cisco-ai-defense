@@ -27,6 +27,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}/requirements-dev.txt
 
       - name: Install dependencies
         run: pip install ansible-core>=2.16 ansible-lint yamllint flake8
@@ -37,7 +38,7 @@ jobs:
 
       - name: Run flake8
         working-directory: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}
-        run: flake8 plugins/ --max-line-length=160 --ignore=E402,W503
+        run: flake8 plugins/ extensions/ --max-line-length=160 --select=E,F,W --ignore=E402,W503
 
       - name: Run ansible-lint
         working-directory: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}
@@ -65,6 +66,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}/requirements-dev.txt
 
       - name: Install ansible-core ${{ matrix.ansible }}
         run: pip install "ansible-core~=${{ matrix.ansible }}.0"
@@ -92,6 +94,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}/requirements-dev.txt
 
       - name: Install dependencies
         run: pip install ansible-core>=2.16 requests pytest pytest-cov
@@ -124,6 +127,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
+          cache-dependency-path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION }}/requirements-dev.txt
 
       - name: Install dependencies
         run: pip install ansible-core>=2.16 requests
