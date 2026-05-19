@@ -1,7 +1,3 @@
-extensions/eda/plugins/event_filter/severity_filter.py compile 2.7
-extensions/eda/plugins/event_filter/severity_filter.py import 2.7
-extensions/eda/plugins/event_source/threat_events.py compile 2.7
-extensions/eda/plugins/event_source/threat_events.py import 2.7
 plugins/filter/ai_defense_filters.py compile 2.7
 plugins/filter/ai_defense_filters.py import 2.7
 plugins/lookup/ai_defense_policy.py compile 2.7
