@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    short_description: "Deploy Cisco AI Defense"
+    options:
+      ai_defense_deploy_api_key:
+        description: Cisco AI Defense API key for authentication.
+        type: str
+        no_log: true
+      ai_defense_deploy_organization_id:
+        description: Cisco AI Defense organization ID.
+        type: str
+      ai_defense_deploy_state:
+        description: Desired state.
+        type: str
