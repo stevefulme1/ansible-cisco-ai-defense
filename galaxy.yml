@@ -5,7 +5,12 @@ version: 0.1.0
 readme: README.md
 authors:
   - Steve Fulmer <sfulmer@redhat.com>
-description: "EXPERIMENTAL - proof of concept, not production ready. Ansible Collection for Cisco AI Defense platform. Provides 35 modules, 6 roles, filter/lookup plugins, and EDA plugins for managing policies, guardrails, threat detection, model scanning, API protection, compliance reports, supply chain risk, PII detection, and red-team validation via the Cisco AI Defense REST API."
+description: >-
+  Ansible Collection for Cisco AI Defense platform.
+  Provides 8 modules for AI content inspection, application management,
+  policy management, and connection management via the Cisco AI Defense
+  Inspection and Management REST APIs. Includes filter plugins for
+  processing inspection results and EDA plugins for event-driven automation.
 license:
   - GPL-3.0-or-later
 tags:
