@@ -36,4 +36,3 @@ build_ignore:
   - .pre-commit-config.yaml
   - .DS_Store
   - __pycache__
-license_file: COPYING
