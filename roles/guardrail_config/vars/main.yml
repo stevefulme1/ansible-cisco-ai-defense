@@ -1,5 +1,0 @@
----
-# Internal variables - do not override
-guardrail_config_api_headers:
-  Content-Type: "application/json"
-  Authorization: "Bearer {{ guardrail_config_api_key }}"

@@ -1,4 +1,0 @@
----
-- name: Verify collection is loadable
-  ansible.builtin.debug:
-    msg: "stevefulme1.cisco_ai_defense collection is available"
