@@ -1,3 +1,7 @@
+> **EXPERIMENTAL** - This collection is a proof of concept and is not production ready.
+> Modules may use placeholder API endpoints and have not been validated against real infrastructure.
+> Do not use in production environments.
+
 # Cisco AI Defense Ansible Collection
 
 [![CI](https://github.com/stevefulme1/ansible-cisco-ai-defense/actions/workflows/ci.yml/badge.svg)](https://github.com/stevefulme1/ansible-cisco-ai-defense/actions/workflows/ci.yml)
