@@ -1,0 +1,53 @@
+---
+- name: Create cisco_aidefense_connection (check mode)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_connection:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_id: "{{ oci_cisco_application_id }}"
+    connection_name: "{{ oci_cisco_connection_name }}"
+    connection_type: API
+  check_mode: true
+  register: _check
+- name: Verify check mode reports changed
+  ansible.builtin.assert:
+    that:
+      - _check is changed
+- name: Create cisco_aidefense_connection
+  stevefulme1.cisco_ai_defense.cisco_aidefense_connection:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_id: "{{ oci_cisco_application_id }}"
+    connection_name: "{{ oci_cisco_connection_name }}"
+    connection_type: API
+  register: _create
+- name: Verify cisco_aidefense_connection was created
+  ansible.builtin.assert:
+    that:
+      - _create is changed
+      - _create.connection is defined
+- name: Delete cisco_aidefense_connection
+  stevefulme1.cisco_ai_defense.cisco_aidefense_connection:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    connection_id: "{{ _create.connection.connection_id }}"
+    state: absent
+  register: _delete
+- name: Verify cisco_aidefense_connection was deleted
+  ansible.builtin.assert:
+    that:
+      - _delete is changed
+- name: Delete cisco_aidefense_connection again (idempotent)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_connection:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    connection_id: "{{ _create.connection.connection_id }}"
+    state: absent
+  register: _delete_idem
+- name: Verify delete idempotency
+  ansible.builtin.assert:
+    that:
+      - _delete_idem is not changed

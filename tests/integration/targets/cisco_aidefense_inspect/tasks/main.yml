@@ -1,0 +1,15 @@
+---
+- name: Execute cisco_aidefense_inspect
+  stevefulme1.cisco_ai_defense.cisco_aidefense_inspect:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    messages:
+      - role: user
+        content: Hello, world
+  register: _result
+- name: Verify cisco_aidefense_inspect executed successfully
+  ansible.builtin.assert:
+    that:
+      - _result is not changed
+      - _result.response is defined

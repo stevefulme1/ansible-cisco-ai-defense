@@ -1,0 +1,79 @@
+---
+- name: Create cisco_aidefense_application (check mode)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_name: "{{ oci_cisco_application_name }}"
+    description: Integration test application
+    connection_type: API
+  check_mode: true
+  register: _check
+- name: Verify check mode reports changed
+  ansible.builtin.assert:
+    that:
+      - _check is changed
+- name: Create cisco_aidefense_application
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_name: "{{ oci_cisco_application_name }}"
+    description: Integration test application
+    connection_type: API
+  register: _create
+- name: Verify cisco_aidefense_application was created
+  ansible.builtin.assert:
+    that:
+      - _create is changed
+      - _create.application is defined
+- name: Create cisco_aidefense_application again (idempotent)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_name: "{{ oci_cisco_application_name }}"
+    description: Integration test application
+    connection_type: API
+  register: _idem
+- name: Verify create idempotency
+  ansible.builtin.assert:
+    that:
+      - _idem is not changed
+- name: Update cisco_aidefense_application
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_id: "{{ _create.application.application_id }}"
+    application_name: "{{ oci_cisco_application_name }}"
+    description: Updated integration test application
+  register: _update
+- name: Verify cisco_aidefense_application was updated
+  ansible.builtin.assert:
+    that:
+      - _update is changed
+- name: Delete cisco_aidefense_application
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_id: "{{ _create.application.application_id }}"
+    state: absent
+  register: _delete
+- name: Verify cisco_aidefense_application was deleted
+  ansible.builtin.assert:
+    that:
+      - _delete is changed
+- name: Delete cisco_aidefense_application again (idempotent)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_application:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    application_id: "{{ _create.application.application_id }}"
+    state: absent
+  register: _delete_idem
+- name: Verify delete idempotency
+  ansible.builtin.assert:
+    that:
+      - _delete_idem is not changed

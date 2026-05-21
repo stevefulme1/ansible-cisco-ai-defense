@@ -1,0 +1,39 @@
+---
+- name: Update cisco_aidefense_policy
+  stevefulme1.cisco_ai_defense.cisco_aidefense_policy:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    policy_id: "{{ oci_cisco_policy_id }}"
+    name: "{{ oci_cisco_policy_name }}"
+    status: active
+  register: _update
+- name: Verify cisco_aidefense_policy was updated
+  ansible.builtin.assert:
+    that:
+      - _update is changed
+      - _update.policy is defined
+- name: Delete cisco_aidefense_policy
+  stevefulme1.cisco_ai_defense.cisco_aidefense_policy:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    policy_id: "{{ oci_cisco_policy_id }}"
+    state: absent
+  register: _delete
+- name: Verify cisco_aidefense_policy was deleted
+  ansible.builtin.assert:
+    that:
+      - _delete is changed
+- name: Delete cisco_aidefense_policy again (idempotent)
+  stevefulme1.cisco_ai_defense.cisco_aidefense_policy:
+    api_key: "{{ oci_cisco_api_key }}"
+    region: us
+    validate_certs: false
+    policy_id: "{{ oci_cisco_policy_id }}"
+    state: absent
+  register: _delete_idem
+- name: Verify delete idempotency
+  ansible.builtin.assert:
+    that:
+      - _delete_idem is not changed
